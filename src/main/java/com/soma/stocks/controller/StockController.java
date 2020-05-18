@@ -2,14 +2,15 @@ package com.soma.stocks.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.ta4j.core.indicators.statistics.PearsonCorrelationIndicator;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,22 +48,41 @@ public class StockController {
 		Calendar to = Calendar.getInstance();
 		from.add(Calendar.YEAR, -5); // from 2 year ago
 		 
-		Stock google = YahooFinance.get(stockName);
-		List<HistoricalQuote> googleHistQuotes = google.getHistory(from, to, Interval.DAILY);
-		// googleHistQuotes is the same as google.getHistory() at this point
-		// provide some parameters to the getHistory method to send a new request to Yahoo Finance
-		if (google == null) {
-			System.out.println("La accion " + stockName + " no esta en Yahoo :(");
-		}
+		Stock stock = YahooFinance.get(stockName);
+		List<HistoricalQuote> stockHistQuotes = stock.getHistory(from, to, Interval.DAILY);
 		
-		List<HistoricalQuote> listahistorica = google.getHistory(Interval.DAILY);
+		int tamañoLista = stockHistQuotes.size();
+		
+		
+		//Elimino el campo fecha para hacer la correlacion
+		stockHistQuotes.forEach(historicalQuote -> {
+			historicalQuote.getDate().set(0, 0, 0);
+		});
+		
+		List<HistoricalQuote> stockHistQuotes2 = stockHistQuotes;
+		
+		double[] stockHistQuotesArray;
+		stockHistQuotesArray = new double[stockHistQuotes.size()];
+		
+//		stockHistQuotesArray[0]from.set(field, value);
+		
+		
+		System.out.println("Stock: " + stock);
+		System.out.println("Tamaño lista:" + tamañoLista);
+		
+		
+//		double corr = new PearsonsCorrelation().	correlation(stockHistQuotes.toArray(), stockHistQuotes2.toArray());
 
-		BigDecimal price = google.getQuote().getPrice();
+		System.out.println("History:" + stockHistQuotes);
 		
-		
+		double[] x = {1, 2, 4, -5};
+	    double[] y = {-2, 4, 9, 234};
+	    double corr = new PearsonsCorrelation().correlation(y, x);
 
-		System.out.println("Stock: " + google);
-		return googleHistQuotes;
+	    System.out.println(corr);
+		
+		
+		return stockHistQuotes;
 		
 	}
 	
