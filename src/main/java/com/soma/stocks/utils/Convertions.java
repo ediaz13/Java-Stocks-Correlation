@@ -16,8 +16,8 @@ public class Convertions {
 		getStockData.add(BigDecimal.ZERO);
 		
 		stockHistQuotes.forEach(historicalQuote -> {
-			getStockData.add(historicalQuote.getClose());
 			getStockData.add(historicalQuote.getOpen());
+			getStockData.add(historicalQuote.getClose());
 			getStockData.add(historicalQuote.getHigh());
 			getStockData.add(historicalQuote.getLow());
 		});

@@ -39,9 +39,9 @@ public class StockController {
      * @return The response instance. Status Code: 200.
      */
 
-	@ApiOperation(value = "View stock data!", response = ResponseEntity.class)
+	@ApiOperation(value = "Get Pearson Correlation between two stocks", response = ResponseEntity.class)
 	@ApiResponses(value = {
-	        @ApiResponse(code = 200, message = "Successfully retrieved stock values"),
+	        @ApiResponse(code = 200, message = "Successfully retrieved Pearson Correlation value"),
 	        @ApiResponse(code = 401, message = "You are not authorized to view the resource stock"),
 	        @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 	        @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
