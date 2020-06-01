@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Stocks Pearson Correlation Index</title>
+<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">
+
+//Function: creates a new paragraph and appends it to the bottom of the HTML body.
+
+function createParagraph() {
+  let para = document.createElement('p');
+  para.textContent = 'You clicked the button!';
+  document.body.appendChild(para);
+}
+
+const buttons = document.querySelectorAll('button');
+
+for(let i = 0; i < buttons.length ; i++) {
+  buttons[i].addEventListener('click', createParagraph);
+}
+
+function calculate(){
+	var stock_1 = $("#ID_stock_1").val();
+    var stock_2 = $("#ID_stock_2").val();
+   
+    
+    $.ajax({
+      type: "GET",
+      url: "http://localhost:8080/stock/" + stock_1 + "/and/" + stock_2,
+      cache: false,
+      dataType: "json",
+      success: function(data){
+    	 console.log(data);
+    	 alert( "Load was performed.");
+    	 alert(data);
+    	 $('body').append('<div class="user">Jamond</div>');
+         
+         
+      },
+	    error: function(e) {
+	        console.log('Error!', e);
+	    }
+    });
+    
+}
+
+</script>
+</head>
+
+<body>
+	<div>
+		<form>
+			Stock 1: <input type="stock_1" name="stock_1" id="ID_stock_1"></br>
+			Stock 2: <input type="stock_2" name="stock_2" id="ID_stock_2"></br>
+			<button type="submit" name="submit" onClick="calculate()">Calculate</button>
+		</form>
+	</div>
+	
+	<p>
+		Response should come here!
+	</p>
+	
+	<button onclick="createParagraph()">Click me!</button>
+	
+	
+</body>
+</html>
