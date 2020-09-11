@@ -2,6 +2,7 @@ package com.soma.stocks.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -76,20 +77,29 @@ public class StockController {
 	}
 	
 	@GetMapping(value = "/stock/{stockName_1}/and/{stockName_2}/{from}", produces = "application/json")
-	public double getPearsonCorrelationFromn(@PathVariable String stockName_1, 
-			@PathVariable String stockName_2, @PathVariable Calendar from) throws IOException, Exception {
+	public double getPearsonCorrelationFromn(@PathVariable String stockName_1,
+			@PathVariable String stockName_2, @PathVariable String from) throws IOException, Exception {
 		
 //		Calendar from = Calendar.getInstance();
 		Calendar to = Calendar.getInstance();
 //		from.add(Calendar.YEAR, -2); // from 2 year ago
-		 
+		//1. Create a Date from String
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
+		String dateInString = from;
+		Date date = sdf.parse(dateInString);
+		
+		Calendar fromCal = Calendar.getInstance();
+		fromCal.setTime(date);
+      
+		
+        
 		Log.info("Getting Stocks Data from Yahoo API");
 		
 		Stock stock_1 = YahooFinance.get(stockName_1);
-		List<HistoricalQuote> stockHistQuotes_1 = stock_1.getHistory(from, to, Interval.DAILY);
+		List<HistoricalQuote> stockHistQuotes_1 = stock_1.getHistory(fromCal, to, Interval.DAILY);
 		
 		Stock stock_2 = YahooFinance.get(stockName_2);
-		List<HistoricalQuote> stockHistQuotes_2 = stock_2.getHistory(from, to, Interval.DAILY);
+		List<HistoricalQuote> stockHistQuotes_2 = stock_2.getHistory(fromCal, to, Interval.DAILY);
 		
 		 Log.info("Convierto lista de llegada en array double: ");
 		double[] arrayStockQuotes_1 = Convertions.getDoubleArrayStockPrices(stockHistQuotes_1);
