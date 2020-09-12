@@ -31,7 +31,7 @@ import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.jfree.util.Log;
 
 @RestController
-@Api(value="onlinestore", description="Stocks Data")
+@Api(value="onlinestore")
 
 public class StockController {
 	
@@ -50,7 +50,7 @@ public class StockController {
 	})
 	
 	@GetMapping(value = "/stock/{stockName_1}/and/{stockName_2}", produces = "application/json")
-	public String getPearsonCorrelation(@PathVariable String stockName_1, @PathVariable String stockName_2) throws IOException, Exception {
+	public String getPearsonCorrelation(@PathVariable String stockName_1, @PathVariable String stockName_2) throws Exception {
 		
 		Calendar from = Calendar.getInstance();
 		Calendar to = Calendar.getInstance();
@@ -78,21 +78,16 @@ public class StockController {
 	
 	@GetMapping(value = "/stock/{stockName_1}/and/{stockName_2}/{from}", produces = "application/json")
 	public double getPearsonCorrelationFromn(@PathVariable String stockName_1,
-			@PathVariable String stockName_2, @PathVariable String from) throws IOException, Exception {
+			@PathVariable String stockName_2, @PathVariable String from) throws Exception {
 		
-//		Calendar from = Calendar.getInstance();
 		Calendar to = Calendar.getInstance();
-//		from.add(Calendar.YEAR, -2); // from 2 year ago
 		//1. Create a Date from String
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
 		String dateInString = from;
 		Date date = sdf.parse(dateInString);
-		
 		Calendar fromCal = Calendar.getInstance();
 		fromCal.setTime(date);
-      
-		
-        
+
 		Log.info("Getting Stocks Data from Yahoo API");
 		
 		Stock stock_1 = YahooFinance.get(stockName_1);
