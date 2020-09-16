@@ -36,7 +36,7 @@ public class SwaggerConfig {
     private ApiInfo metaData() {
          return new ApiInfo(
                  "Spring Boot REST API",
-                 "Spring Boot REST API for Pearson's COrrelation",
+                 "Spring Boot REST API for Pearson's Correlation",
                  "1.0",
                  "Terms of service",
                  new Contact("Emanuel Diaz", "https://financequotes-api.com/#singlestock", "diazemanuel27@gmail.com"),
