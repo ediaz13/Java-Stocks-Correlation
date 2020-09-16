@@ -76,7 +76,7 @@ public class StockController {
 		
 	}
 	
-	@GetMapping(value = "/stock/{stockName_1}/and/{stockName_2}/{from}", produces = "application/json")
+	@GetMapping(value = "/stock/{stockName_1}/and/{stockName_2}/from/{from}", produces = "application/json")
 	public double getPearsonCorrelationFromn(@PathVariable String stockName_1,
 			@PathVariable String stockName_2, @PathVariable String from) throws Exception {
 		
