@@ -36,7 +36,7 @@ import org.jfree.util.Log;
 public class PearsonsController {
 	
 	/**
-     * Return Stock Data!
+     * Return Stocks Correlation Data!
      *
      * @return The response instance. Status Code: 200.
      */
@@ -55,14 +55,22 @@ public class PearsonsController {
 		Calendar from = Calendar.getInstance();
 		Calendar to = Calendar.getInstance();
 		from.add(Calendar.YEAR, -2); // from 2 year ago
-		 
+
+		List<HistoricalQuote> stockHistQuotes_1 = null;
+		List<HistoricalQuote> stockHistQuotes_2 = null;
+
 		Log.info("Getting Stocks Data from Yahoo API");
-		
-		Stock stock_1 = YahooFinance.get(stockName_1);
-		List<HistoricalQuote> stockHistQuotes_1 = stock_1.getHistory(from, to, Interval.DAILY);
-		
-		Stock stock_2 = YahooFinance.get(stockName_2);
-		List<HistoricalQuote> stockHistQuotes_2 = stock_2.getHistory(from, to, Interval.DAILY);
+
+		try {
+			Stock stock_1 = YahooFinance.get(stockName_1);
+			Stock stock_2 = YahooFinance.get(stockName_2);
+
+			stockHistQuotes_1 = stock_1.getHistory(from, to, Interval.DAILY);
+			stockHistQuotes_2 = stock_2.getHistory(from, to, Interval.DAILY);
+
+		} catch (RuntimeException e){
+			Log.info(e);
+		}
 		
 		 Log.info("Convierto lista de llegada en array double: ");
 		double[] arrayStockQuotes_1 = Convertions.getDoubleArrayStockPrices(stockHistQuotes_1);
@@ -77,26 +85,34 @@ public class PearsonsController {
 	}
 	
 	@GetMapping(value = "/stock/{stockName_1}/and/{stockName_2}/from/{from}", produces = "application/json")
-	public double getPearsonCorrelationFromn(@PathVariable String stockName_1,
+	public double getPearsonCorrelationFrom(@PathVariable String stockName_1,
 			@PathVariable String stockName_2, @PathVariable String from) throws Exception {
 		
 		Calendar to = Calendar.getInstance();
 		//1. Create a Date from String
-		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("mmDDyyyy");
 		String dateInString = from;
 		Date date = sdf.parse(dateInString);
 		Calendar fromCal = Calendar.getInstance();
 		fromCal.setTime(date);
 
+		List<HistoricalQuote> stockHistQuotes_1 = null;
+		List<HistoricalQuote> stockHistQuotes_2 = null;
+
 		Log.info("Getting Stocks Data from Yahoo API");
-		
-		Stock stock_1 = YahooFinance.get(stockName_1);
-		List<HistoricalQuote> stockHistQuotes_1 = stock_1.getHistory(fromCal, to, Interval.DAILY);
-		
-		Stock stock_2 = YahooFinance.get(stockName_2);
-		List<HistoricalQuote> stockHistQuotes_2 = stock_2.getHistory(fromCal, to, Interval.DAILY);
-		
-		 Log.info("Convierto lista de llegada en array double: ");
+
+		try {
+			Stock stock_1 = YahooFinance.get(stockName_1);
+			Stock stock_2 = YahooFinance.get(stockName_2);
+
+			stockHistQuotes_1 = stock_1.getHistory(fromCal, to, Interval.DAILY);
+			stockHistQuotes_2 = stock_2.getHistory(fromCal, to, Interval.DAILY);
+			
+		} catch (RuntimeException e){
+			Log.info(e);
+		}
+
+		Log.info("Convierto lista de llegada en array double: ");
 		double[] arrayStockQuotes_1 = Convertions.getDoubleArrayStockPrices(stockHistQuotes_1);
 		double[] arrayStockQuotes_2 = Convertions.getDoubleArrayStockPrices(stockHistQuotes_2);
 		
